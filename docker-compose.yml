@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+
+  airflow:
+    image: puckel/docker-airflow:latest
+    depends_on:
+      - postgres
+    environment:
+      - LOAD_EX=y
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+    ports:
+      - "8081:8080"
